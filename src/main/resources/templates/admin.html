@@ -1,0 +1,614 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Ministerio de Seguridad</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="assets/css/main.css" />
+    <noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+</head>
+<body class="is-preload">
+
+<!-- Wrapper-->
+<div id="wrapper">
+
+    <!-- Nav -->
+    <nav id="nav">
+        <a href="#home" class="icon solid fa-home" style="color: lightseagreen;"><span>Personal</span></a>
+        <a href="#users" class="icon solid fa-users" style="color: lightseagreen;"><span>Usuarios</span></a>
+        <a href="#entidades" class="icon solid fa-briefcase" style="color: lightseagreen;"><span>Entidades</span></a>
+        <a href="#sucursales" class="icon solid fa-building" style="color: lightseagreen;"><span>Sucursales</span></a>
+        <a href="#contratos" class="icon solid fa-file-contract" style="color: lightseagreen;"><span>Contratos</span></a>
+        <a href="#detenidos" class="icon solid fa-user-injured" style="color: lightseagreen;"><span>Detenidos</span></a>
+        <a href="#bandas" class="icon solid fa-users-cog" style="color: lightseagreen;"><span>Bandas</span></a>
+        <a href="#jueces" class="icon solid fa-gavel" style="color: lightseagreen;"><span>Jueces</span></a>
+        <a href="#asaltos" class="icon solid fa-user-secret" style="color: lightseagreen;"><span>Asaltos</span></a>
+
+    </nav>
+
+    <!-- Main -->
+    <div id="main">
+
+        <!-- Personal -->
+        <article id="home" class="panel intro">
+            <header>
+                <h1 th:text="${usuario.nombre}"></h1>
+                <p>Investigador(a)</p>
+                <br/>
+                <p>
+                    <a class="button" href="/logout">Logout</a>
+                </p>
+            </header>
+            <div class="jumplink pic">
+                <img src="images/admin.png" alt="" />
+            </div>
+        </article>
+
+        <!-- Usuarios -->
+        <article id="users" class="panel">
+            <header>
+                <h2>Gestión de Usuarios</h2>
+            </header>
+            <div th:each="u : ${usuarios}">
+                <form action="#users" th:action="@{/editar-borrar-usuario}" method="post">
+                    <input type="hidden" name="admin" th:value="${usuario.codigo}" />
+                    <div class="row">
+                        <div class="col-3 col-12-medium">
+                            <input type="text" name="codigo" th:value="${u.codigo}" readonly required />
+                        </div>
+                        <div class="col-3 col-12-medium">
+                            <input type="text" name="nombre" th:value="${u.nombre}" required />
+                        </div>
+                        <div class="col-3 col-12-medium">
+                            <input type="password" name="password" th:value="${u.password}" required />
+                        </div>
+                        <div class="col-3 col-12-medium">
+                            <input type="text" name="rol" th:value="${u.rol}" readonly required />
+                        </div>
+                        <div class="col-2 col-12-medium">
+                            <input type="submit" name="accion" value="Editar" />
+                        </div>
+                        <div th:if="${u.codigo != usuario.codigo}" class="col-2 col-12-medium">
+                            <input type="submit" name="accion" value="Borrar" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div>
+                <form action="#users" th:action="@{/nuevo-usuario}" method="post">
+                    <input type="hidden" name="admin" th:value="${usuario.codigo}" />
+                    <div class="row">
+                        <div class="col-3 col-12-medium">
+                            <input type="text" name="codigo" placeholder="Código" required />
+                        </div>
+                        <div class="col-3 col-12-medium">
+                            <input type="text" name="nombre" placeholder="Nombre" required />
+                        </div>
+                        <div class="col-3 col-12-medium">
+                            <input type="password" name="password" placeholder="Password" required />
+                        </div>
+                        <div class="col-3 col-12-medium">
+                            <select name="rol">
+                                <option value="Vigilante">Vigilante</option>
+                                <option value="Investigador">Investigador</option>
+                            </select>
+                        </div>
+                        <div class="col-3 col-12-medium">
+                            <input type="submit" value="Nuevo" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </article>
+
+        <!-- Sucursales -->
+        <article id="sucursales" class="panel">
+            <header>
+                <h2>Gestión de Sucursales</h2>
+            </header>
+
+            <div style="background-color: #f9f9f9; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); margin-top: 20px;">
+                <!-- Lista de Sucursales -->
+                <div th:each="sucursal : ${sucursales}" style="margin-bottom: 20px;">
+                    <form th:action="@{/editar-borrar-sucursal}" method="post">
+                        <input type="hidden" name="id" th:value="${sucursal.id}" />
+                        <input type="hidden" name="admin" th:value="${usuario.codigo}" />
+                        <div class="row" style="display: flex; align-items: center;">
+                            <div class="col-2 col-12-small" style="flex: 1; margin-right: 10px;">
+                                <input type="text" name="codigo" th:value="${sucursal.codigo}" required style="width: 100%; padding: 5px; border: 1px solid #ccc; border-radius: 5px;" />
+                            </div>
+                            <div class="col-3 col-12-small" style="flex: 1; margin-right: 10px;">
+                                <input type="text" name="domicilio" th:value="${sucursal.domicilio}" required style="width: 100%; padding: 5px; border: 1px solid #ccc; border-radius: 5px;" />
+                            </div>
+                            <div class="col-2 col-12-small" style="flex: 1; margin-right: 10px;">
+                                <input type="text" name="cantEmpleados" th:value="${sucursal.cantidadEmpleados}" required style="width: 100%; padding: 5px; border: 1px solid #ccc; border-radius: 5px;" />
+                            </div>
+                            <div class="col-3 col-12-small" style="flex: 1; margin-right: 10px;">
+                                <!-- Lista de Entidades -->
+                                <select name="entidadId" required style="width: 100%; padding: 5px; border: 1px solid #ccc; border-radius: 5px;">
+                                    <option th:each="entidad : ${entidades}"
+                                            th:value="${entidad.id}"
+                                            th:text="${entidad.codigo}"
+                                            th:selected="${entidad.id == sucursal.entidad.id}"></option>
+                                </select>
+                            </div>
+                            <div class="col-1 col-12-small" style="flex: 0 0 auto; margin-right: 10px;">
+                                <input type="submit" name="accion" value="Editar" style="padding: 5px 10px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;" />
+                            </div>
+                            <div class="col-1 col-12-small" style="flex: 0 0 auto;">
+                                <input type="submit" name="accion" value="Borrar" style="padding: 5px 10px; background-color: #f44336; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Formulario para Nueva Sucursal -->
+                <div style="background-color: #f1f1f1; padding: 20px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); margin-top: 20px;">
+                    <form th:action="@{/nueva-sucursal}" method="post">
+                        <input type="hidden" name="admin" th:value="${usuario.codigo}" />
+                        <div class="row">
+                            <div class="col-3 col-12-medium" style="margin-bottom: 15px;">
+                                <input type="text" name="codigo" placeholder="Código" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);" />
+                            </div>
+                            <div class="col-3 col-12-medium" style="margin-bottom: 15px;">
+                                <input type="text" name="domicilio" placeholder="Domicilio" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);" />
+                            </div>
+                            <div class="col-3 col-12-medium" style="margin-bottom: 15px;">
+                                <input type="text" name="cantEmpleados" placeholder="Cant Empleados" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);" />
+                            </div>
+                            <div class="col-3 col-12-medium" style="margin-bottom: 15px;">
+                                <select name="entidadId" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);">
+                                    <option th:each="entidad : ${entidades}" th:value="${entidad.id}" th:text="${entidad.codigo}"></option>
+                                </select>
+                            </div>
+                            <div class="col-3 col-12-medium" style="margin-bottom: 15px;">
+                                <input type="submit" value="Agregar" style="width: 100%; padding: 10px; background-color: #0ec8c8; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; transition: background-color 0.3s ease;" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </article>
+
+
+        <!-- Entidades -->
+        <article id="entidades" class="panel">
+            <header>
+                <h2>Gestión de Entidades</h2>
+            </header>
+
+            <div style="background-color: #f9f9f9; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); margin-top: 20px;">
+                <!-- Lista de Entidades -->
+                <div th:each="entidad : ${entidades}" style="margin-bottom: 20px;">
+                    <form th:action="@{/editar-borrar-entidad}" method="post">
+                        <input type="hidden" name="admin" th:value="${usuario.codigo}" />
+                        <input type="hidden" name="id" th:value="${entidad.id}" />
+                        <div class="row">
+                            <div class="col-3 col-12-small" style="margin-bottom: 15px;">
+                                <input type="text" name="codigo" th:value="${entidad.codigo}" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);" />
+                            </div>
+                            <div class="col-3 col-12-small" style="margin-bottom: 15px;">
+                                <input type="text" name="domicilio" th:value="${entidad.domicilio}" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);" />
+                            </div>
+                            <div class="col-12-small" style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+                                <input type="submit" name="accion" value="Editar" style="flex-grow: 1; max-width: 100px; padding: 10px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; transition: background-color 0.3s ease; margin-right: 10px;" />
+                                <input type="submit" name="accion" value="Borrar" style="flex-grow: 1; max-width: 100px; padding: 10px; background-color: #f44336; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; transition: background-color 0.3s ease;" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Formulario para Nueva Entidad -->
+                <div style="background-color: #f1f1f1; padding: 20px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); margin-top: 20px;">
+                    <form th:action="@{/nueva-entidad}" method="post">
+                        <input type="hidden" name="admin" th:value="${usuario.codigo}" />
+                        <div class="row">
+                            <div class="col-3 col-12-medium" style="margin-bottom: 15px;">
+                                <input type="text" name="codigo" placeholder="Localidad" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);" />
+                            </div>
+                            <div class="col-3 col-12-medium" style="margin-bottom: 15px;">
+                                <input type="text" name="domicilio" placeholder="Domicilio" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);" />
+                            </div>
+                            <div class="col-3 col-12-medium" style="margin-bottom: 15px;">
+                                <input type="submit" value="Agregar" style="width: 100%; padding: 10px; background-color: #2196F3; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; transition: background-color 0.3s ease;" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </article>
+
+        <!-- Contratos -->
+        <article id="contratos" class="panel">
+            <header>
+                <h2>Gestión de Contratos</h2>
+            </header>
+
+            <!-- Lista de Contratos -->
+            <div style="background-color: #f9f9f9; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); margin-top: 20px;">
+                <div th:each="contrato : ${contratos}" style="margin-bottom: 20px;">
+                    <form th:action="@{/editar-borrar-contrato}" method="post" style="display: flex; flex-wrap: wrap; gap: 10px;">
+                        <input type="hidden" name="id" th:value="${contrato.id}">
+                        <input type="hidden" name="admin" th:value="${usuario.codigo}">
+
+                        <div style="flex: 1 1 150px;">
+                            <input type="text" name="codigo" th:value="${contrato.codigo}" required="" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+                        </div>
+
+                        <div style="flex: 1 1 100px;">
+                            <input type="number" name="edad" th:value="${contrato.edad}" required="" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+                        </div>
+
+                        <div style="flex: 1 1 150px;">
+                            <input type="date" name="fechaDeContratacion" th:value="${contrato.fechaDeContratacion}" required="" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+                        </div>
+
+                        <div style="flex: 1 1 150px;">
+                            <select name="tieneArma" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+                                <option th:value="true" th:selected="${contrato.tieneArma == true}">Sí</option>
+                                <option th:value="false" th:selected="${contrato.tieneArma == false}">No</option>
+                            </select>
+                        </div>
+
+                        <div style="flex: 1 1 200px;">
+                            <select name="sucursalId" required="" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+                                <option th:each="sucursal : ${sucursales}" th:value="${sucursal.id}" th:text="${sucursal.codigo}" th:selected="${sucursal.id == contrato.sucursal.id}"></option>
+                            </select>
+                        </div>
+
+                        <div style="display: flex; gap: 10px; flex-grow: 1;">
+                            <input type="submit" name="accion" value="Editar" style="padding: 10px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">
+                            <input type="submit" name="accion" value="Borrar" style="padding: 10px; background-color: #f44336; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Formulario para Nuevo Contrato -->
+                <div style="background-color: #f1f1f1; padding: 20px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); margin-top: 20px;">
+                    <form th:action="@{/nuevo-contrato}" method="post">
+                        <input type="hidden" name="admin" th:value="${usuario.codigo}">
+                        <div class="row" style="display: flex; gap: 10px; flex-wrap: wrap;">
+
+                            <div style="flex: 1 1 150px;">
+                                <input type="text" name="codigo" placeholder="Nombre" required="" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);">
+                            </div>
+
+                            <div style="flex: 1 1 100px;">
+                                <input type="number" name="edad" placeholder="Edad" required="" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);">
+                            </div>
+
+                            <div style="flex: 1 1 150px;">
+                                <input type="date" name="fechaDeContratacion" placeholder="Fecha de Contratación" required="" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);">
+                            </div>
+
+                            <div style="flex: 1 1 150px;">
+                                <select id="tieneArma" name="tieneArma" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);">
+                                    <option value="true">Sí</option>
+                                    <option value="false">No</option>
+                                </select>
+                                <label style="display: block; font-size: 15px; font-weight: bold; color: #333; margin-top: 5px;">¿TIENE ARMA?</label>
+                            </div>
+
+                            <div style="flex: 1 1 200px;">
+                                <select name="sucursalId" required="" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);">
+                                    <option th:each="sucursal : ${sucursales}" th:value="${sucursal.id}" th:text="${sucursal.codigo}"></option>
+                                </select>
+                            </div>
+
+                            <div style="flex: 1 1 100%; text-align: center; margin-top: 15px;">
+                                <input type="submit" value="Agregar Contrato" style="padding: 10px 20px; background-color: #0ec8c8; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; transition: background-color 0.3s ease;">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </article>
+
+
+
+        <!-- Detenidos -->
+        <article id="detenidos" class="panel">
+            <header>
+                <h2>Gestión de Detenidos</h2>
+            </header>
+
+            <div style="background-color: #f9f9f9; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); margin-top: 20px;">
+                <!-- Lista de Detenidos -->
+                <div th:each="detenido : ${detenidos}" style="margin-bottom: 20px;">
+                    <form th:action="@{/editar-borrar-detenido}" method="post">
+                        <input type="hidden" name="admin" th:value="${usuario.codigo}" />
+                        <input type="hidden" name="id" th:value="${detenido.id}" />
+                        <div class="row">
+                            <div class="col-4 col-12-small" style="margin-bottom: 15px;">
+                                <input type="text" name="codigo" th:value="${detenido.codigo}" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);" />
+                            </div>
+                            <div class="col-4 col-12-small" style="margin-bottom: 15px;">
+                                <input type="text" name="nombre" th:value="${detenido.nombre}" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);" />
+                            </div>
+                            <div class="col-4 col-12-small" style="margin-bottom: 15px;">
+                                <select name="bandaId" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);">
+                                    <option value="" th:if="${detenido.banda == null}" selected>No pertenece a ninguna banda</option>
+                                    <option th:each="banda : ${bandas}"
+                                            th:value="${banda.id}"
+                                            th:text="${banda.numeroDeBanda}"
+                                            th:selected="${detenido.banda != null and banda.id == detenido.banda.id}"></option>
+                                </select>
+                            </div>
+                            <div class="col-12-small" style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+                                <input type="submit" name="accion" value="Editar" style="flex-grow: 1; max-width: 100px; padding: 10px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; transition: background-color 0.3s ease; margin-right: 10px;" />
+                                <input type="submit" name="accion" value="Borrar" style="flex-grow: 1; max-width: 100px; padding: 10px; background-color: #f44336; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; transition: background-color 0.3s ease;" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Formulario para Nuevo Detenido -->
+                <div style="background-color: #f1f1f1; padding: 20px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); margin-top: 20px;">
+                    <form th:action="@{/nuevo-detenido}" method="post">
+                        <input type="hidden" name="admin" th:value="${usuario.codigo}" />
+                        <div class="row">
+                            <div class="col-4 col-12-medium" style="margin-bottom: 15px;">
+                                <input type="text" name="codigo" placeholder="Código" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);" />
+                            </div>
+                            <div class="col-4 col-12-medium" style="margin-bottom: 15px;">
+                                <input type="text" name="nombre" placeholder="Nombre" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);" />
+                            </div>
+                            <div class="col-4 col-12-medium" style="margin-bottom: 15px;">
+                                <select name="bandaId" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);">
+                                    <option value="">No pertenece a ninguna banda</option>
+                                    <option th:each="banda : ${bandas}" th:value="${banda.id}" th:text="${banda.numeroDeBanda}"></option>
+                                </select>
+                            </div>
+                            <div class="col-4 col-12-medium" style="margin-bottom: 15px;">
+                                <input type="submit" value="Agregar Detenido" style="width: 100%; padding: 10px; background-color: #2196F3; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; transition: background-color 0.3s ease;" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </article>
+
+
+
+        <!-- Bandas -->
+        <article id="bandas" class="panel">
+            <header>
+                <h2>Gestión de Bandas</h2>
+            </header>
+
+            <div style="background-color: #f9f9f9; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); margin-top: 20px;">
+                <!-- Lista de Bandas -->
+                <div th:each="banda : ${bandas}" style="margin-bottom: 20px;">
+                    <form th:action="@{/editar-borrar-banda}" method="post">
+                        <input type="hidden" name="admin" th:value="${usuario.codigo}" />
+                        <input type="hidden" name="id" th:value="${banda.id}" />
+                        <div class="row">
+                            <div class="col-4 col-12-small" style="margin-bottom: 15px;">
+                                <input type="text" name="numeroDeBanda" th:value="${banda.numeroDeBanda}" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);" />
+                            </div>
+                            <div class="col-4 col-12-small" style="margin-bottom: 15px;">
+                                <input type="text" name="cantMiembros" th:value="${banda.cantMiembros}" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);" />
+                            </div>
+                            <div class="col-12-small" style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+                                <input type="submit" name="accion" value="Editar" style="flex-grow: 1; max-width: 100px; padding: 10px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; transition: background-color 0.3s ease; margin-right: 10px;" />
+                                <input type="submit" name="accion" value="Borrar" style="flex-grow: 1; max-width: 100px; padding: 10px; background-color: #f44336; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; transition: background-color 0.3s ease;" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Formulario para Nueva Banda -->
+                <div style="background-color: #f1f1f1; padding: 20px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); margin-top: 20px;">
+                    <form th:action="@{/nueva-banda}" method="post">
+                        <input type="hidden" name="admin" th:value="${usuario.codigo}" />
+                        <div class="row">
+                            <div class="col-4 col-12-medium" style="margin-bottom: 15px;">
+                                <input type="text" name="numeroDeBanda" placeholder="Nombre de Banda" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);" />
+                            </div>
+                            <div class="col-4 col-12-medium" style="margin-bottom: 15px;">
+                                <input type="text" name="cantMiembros" placeholder="Cantidad de Miembros" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);" />
+                            </div>
+                            <div class="col-4 col-12-medium" style="margin-bottom: 15px;">
+                                <input type="submit" value="Agregar Banda" style="width: 100%; padding: 10px; background-color: #2196F3; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; transition: background-color 0.3s ease;" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </article>
+
+
+        <!-- Jueces -->
+        <article id="jueces" class="panel">
+            <header>
+                <h2>Gestión de Jueces</h2>
+            </header>
+
+            <div style="background-color: #f9f9f9; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); margin-top: 20px;">
+                <!-- Lista de Jueces -->
+                <div th:each="juez : ${jueces}" style="margin-bottom: 20px;">
+                    <form th:action="@{/editar-borrar-juez}" method="post">
+                        <input type="hidden" name="admin" th:value="${usuario.codigo}" />
+                        <input type="hidden" name="id" th:value="${juez.id}" />
+                        <div class="row">
+                            <div class="col-3 col-12-small" style="margin-bottom: 15px;">
+                                <input type="text" name="nombre" th:value="${juez.nombre}" placeholder="Nombre del Juez" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;" />
+                            </div>
+                            <div class="col-3 col-12-small" style="margin-bottom: 15px;">
+                                <input type="number" name="aniosServicio" th:value="${juez.aniosServicio}" placeholder="Años de Servicio" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;" />
+                            </div>
+
+                            <div class="col-3 col-12-small" style="margin-bottom: 15px;">
+                                <input type="text" name="claveJuzgado" th:value="${juez.claveJuzgado}" placeholder="Clave del Juzgado" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;" />
+                            </div>
+                            <div class="col-12-small" style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+                                <input type="submit" name="accion" value="Editar" style="flex-grow: 1; max-width: 100px; padding: 10px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; transition: background-color 0.3s ease; margin-right: 10px;" />
+                                <input type="submit" name="accion" value="Borrar" style="flex-grow: 1; max-width: 100px; padding: 10px; background-color: #f44336; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; transition: background-color 0.3s ease;" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Formulario para Nuevo Juez -->
+                <div style="background-color: #f1f1f1; padding: 20px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); margin-top: 20px;">
+                    <form th:action="@{/nuevo-juez}" method="post">
+                        <input type="hidden" name="admin" th:value="${usuario.codigo}" />
+                        <div class="row">
+                            <div class="col-3 col-12-medium" style="margin-bottom: 15px;">
+                                <input type="text" name="nombre" placeholder="Nombre del Juez" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);" />
+                            </div>
+                            <div class="col-3 col-12-medium" style="margin-bottom: 15px;">
+                                <input type="number" name="aniosServicio" placeholder="Años de Servicio" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);" />
+                            </div>
+
+                            <div class="col-3 col-12-medium" style="margin-bottom: 15px;">
+                                <input type="text" name="claveJuzgado" placeholder="Clave del Juzgado" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);" />
+                            </div>
+                            <div class="col-3 col-12-medium" style="margin-bottom: 15px;">
+                                <input type="submit" value="Agregar Juez" style="width: 100%; padding: 10px; background-color: #2196F3; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; transition: background-color 0.3s ease;" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </article>
+
+
+
+
+        <!-- Asaltos -->
+        <article id="asaltos" class="panel">
+            <header>
+                <h2>Gestión de Asaltos</h2>
+            </header>
+
+            <!-- Lista de Asaltos -->
+            <div th:each="asalto : ${asaltos}" class="asalto-item" style="margin-bottom: 15px; padding: 5px; border: 1px solid #ddd; border-radius: 5px;">
+                <!-- Formulario de edición de Asaltos -->
+                <form th:action="@{/editar-borrar-asalto}" method="post" style="display: flex; align-items: center; gap: 5px;">
+                    <input type="hidden" name="id" th:value="${asalto.id}" />
+                    <input type="hidden" name="admin" th:value="${usuario.codigo}" />
+
+
+
+                    <div style="flex: 1 1 200px;">
+                        <label>Detenido</label>
+                        <select name="detenidoId" required class="input-field" style="width: 100%; padding: 10px;">
+                            <option th:each="detenido : ${detenidos}" th:value="${detenido.id}" th:text="${detenido.nombre}"></option>
+                        </select>
+                    </div>
+                    <div style="flex: 1 1 200px;">
+                        <label>Sucursal</label>
+                        <select name="sucursalId" required class="input-field" style="width: 100%; padding: 10px;">
+                            <option th:each="sucursal : ${sucursales}" th:value="${sucursal.id}" th:text="${sucursal.codigo}"></option>
+                        </select>
+                    </div>
+                    <div style="flex: 1 1 200px;">
+                        <label>Fecha</label>
+                    <input type="date" name="fechaAsalto" th:value="${asalto.fechaAsalto}" required class="input-field" style="width: 120px; padding: 5px;" />
+                    </div>
+                    <div style="flex: 1 1 200px;">
+                        <label>Juez</label>
+                        <select name="juezId" required class="input-field" style="width: 100%; padding: 10px;">
+                            <option th:each="juez : ${jueces}" th:value="${juez.id}" th:text="${juez.nombre}"></option>
+                        </select>
+                    </div>
+
+                    <div style="flex-grow: 1; margin-right: 10px;">
+                        <label>Condena</label>
+                        <select name="condenado" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+                            <option th:value="true" th:selected="${asalto.condenado == true}">Sí</option>
+                            <option th:value="false" th:selected="${asalto.condenado == false}">No</option>
+                        </select>
+                    </div>
+
+                    <div style="flex: 1 1 150px;">
+                        <label>Tiempo</label>
+                    <input type="number" name="tiempoCarcel" th:value="${asalto.tiempoCarcel}" required placeholder="Meses en cárcel" class="input-field" style="width: 70px; padding: 5px;" />
+                    </div>
+                    <input type="submit" name="accion" value="Editar" class="button" style="background-color: #4CAF50; color: white; padding: 5px 10px;" />
+                    <input type="submit" name="accion" value="Borrar" class="button" style="background-color: #f44336; color: white; padding: 5px 10px;" />
+                </form>
+
+            </div>
+
+            <!-- Formulario para Nuevo Asalto -->
+            <div style="background-color: #f1f1f1; padding: 20px; border-radius: 5px; margin-top: 15px;">
+                <form th:action="@{/nuevo-asalto}" method="post" style="display: flex; flex-wrap: wrap; gap: 15px;">
+                    <input type="hidden" name="admin" th:value="${usuario.codigo}" />
+
+                    <!-- Campo Detenido -->
+                    <div style="flex: 1 1 200px;">
+                        <label>Detenido</label>
+                        <select name="detenidoId" required class="input-field" style="width: 100%; padding: 10px;">
+                            <option th:each="detenido : ${detenidos}" th:value="${detenido.id}" th:text="${detenido.nombre}"></option>
+                        </select>
+                    </div>
+
+                    <!-- Campo Sucursal -->
+                    <div style="flex: 1 1 200px;">
+                        <label>Sucursal</label>
+                        <select name="sucursalId" required class="input-field" style="width: 100%; padding: 10px;">
+                            <option th:each="sucursal : ${sucursales}" th:value="${sucursal.id}" th:text="${sucursal.codigo}"></option>
+                        </select>
+                    </div>
+
+                    <!-- Campo Fecha -->
+                    <div style="flex: 1 1 200px;">
+                        <label>Fecha</label>
+                        <input type="date" name="fechaAsalto" required class="input-field" style="width: 100%; padding: 10px;" />
+                    </div>
+
+                    <!-- Campo Juez -->
+                    <div style="flex: 1 1 200px;">
+                        <label>Juez</label>
+                        <select name="juezId" required class="input-field" style="width: 100%; padding: 10px;">
+                            <option th:each="juez : ${jueces}" th:value="${juez.id}" th:text="${juez.nombre}"></option>
+                        </select>
+                    </div>
+
+                    <!-- Campo ¿Fue Condenado? -->
+                    <div style="flex: 1 1 150px;">
+                        <label>¿Fue Condenado?</label>
+                        <select name="condenado" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+                            <option value="true">Sí</option>
+                            <option value="false">No</option>
+                        </select>
+                    </div>
+
+                    <!-- Campo Tiempo en Cárcel -->
+                    <div style="flex: 1 1 150px;">
+                        <label>Tiempo</label>
+                        <input type="number" name="tiempoCarcel" placeholder="Años" required class="input-field" style="width: 100%; padding: 10px;" />
+                    </div>
+
+                    <!-- Botón Agregar Asalto centrado -->
+                    <div style="flex: 1 1 100%; text-align: center;">
+                        <input type="submit" value="Agregar Asalto" class="button" style="background-color: #0ec8c8; color: white; padding: 10px 20px;" />
+                    </div>
+                </form>
+            </div>
+
+
+
+
+
+
+            <!-- Footer -->
+        <div id="footer">
+            <ul class="copyright">
+                <li style="color: black">&copy; UTN-INSPT.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+            </ul>
+        </div>
+    </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/browser.min.js"></script>
+    <script src="assets/js/breakpoints.min.js"></script>
+    <script src="assets/js/util.js"></script>
+    <script src="assets/js/main.js"></script>
+
+</body>
+</html>

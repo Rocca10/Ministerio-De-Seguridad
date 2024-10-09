@@ -1,0 +1,155 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Ministerio de Seguridad</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="assets/css/main.css" />
+    <noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+</head>
+<body class="is-preload">
+
+<!-- Wrapper-->
+<div id="wrapper">
+
+    <!-- Nav -->
+    <nav id="nav">
+        <a href="#home" class="icon solid fa-home" style="color: red;"><span>Personal</span></a>
+        <a href="#entidades" class="icon solid fa-briefcase" style="color: red;"><span>Entidades</span></a>
+        <a href="#sucursales" class="icon solid fa-building" style="color: red;"><span>Sucursales</span></a>
+        <a href="#bandas" class="icon solid fa-users-cog" style="color: red;"><span>Bandas</span></a>
+        <a href="#detenidos" class="icon solid fa-user-injured" style="color: red;"><span>Detenidos</span></a>
+    </nav>
+
+
+    <!-- Main -->
+    <div id="main">
+
+
+
+        <!-- Personal -->
+        <article id="home" class="panel intro">
+            <header>
+                <h1 th:text="${usuario.nombre}"></h1>
+                <p>Vigilante</p>
+                <br/>
+                <p>
+                    <a class="button" href="/logout">Logout</a>
+                </p>
+            </header>
+            <div class="jumplink pic">
+                <img src="images/vigilante.png" alt="" />
+            </div>
+        </article>
+
+        <!-- Sucursales -->
+        <article id="sucursales" class="panel">
+            <header>
+                <h2>Información de Sucursales</h2>
+            </header>
+
+            <div style="background-color: #f9f9f9; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); margin-top: 20px;">
+                <!-- Lista de Sucursales -->
+                <div th:each="sucursal : ${sucursales}" style="margin-bottom: 20px;">
+                    <div class="row" style="display: flex; align-items: center;">
+                        <div class="col-2 col-12-small" style="flex: 1; margin-right: 10px;">
+                            <span th:text="${sucursal.codigo}" style="padding: 5px; border: 1px solid #ccc; display: block;"></span>
+                        </div>
+                        <div class="col-3 col-12-small" style="flex: 1; margin-right: 10px;">
+                            <span th:text="${sucursal.domicilio}" style="padding: 5px; border: 1px solid #ccc; display: block;"></span>
+                        </div>
+                        <div class="col-2 col-12-small" style="flex: 1; margin-right: 10px;">
+                            <span th:text="${sucursal.cantidadEmpleados}" style="padding: 5px; border: 1px solid #ccc; display: block;"></span>
+                        </div>
+                        <div class="col-3 col-12-small" style="flex: 1; margin-right: 10px;">
+                            <span th:text="${sucursal.entidad.codigo}" style="padding: 5px; border: 1px solid #ccc; display: block;"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <!-- Entidades -->
+        <article id="entidades" class="panel">
+            <header>
+                <h2>Información de Entidades</h2>
+            </header>
+
+            <div style="background-color: #f9f9f9; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); margin-top: 20px;">
+                <!-- Lista de Entidades -->
+                <div th:each="entidad : ${entidades}" style="margin-bottom: 20px;">
+                    <div class="row">
+                        <div class="col-3 col-12-small" style="margin-bottom: 15px;">
+                            <span th:text="${entidad.codigo}" style="padding: 10px; border: 1px solid #ccc; display: block;"></span>
+                        </div>
+                        <div class="col-3 col-12-small" style="margin-bottom: 15px;">
+                            <span th:text="${entidad.domicilio}" style="padding: 10px; border: 1px solid #ccc; display: block;"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <!-- Bandas -->
+        <article id="bandas" class="panel">
+            <header>
+                <h2>Información de Bandas</h2>
+            </header>
+
+            <div style="background-color: #f9f9f9; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); margin-top: 20px;">
+                <!-- Lista de Bandas -->
+                <div th:each="banda : ${bandas}" style="margin-bottom: 20px;">
+                    <div class="row">
+                        <div class="col-4 col-12-small" style="margin-bottom: 15px;">
+                            <span th:text="${banda.numeroDeBanda}" style="padding: 10px; border: 1px solid #ccc; display: block;"></span>
+                        </div>
+                        <div class="col-4 col-12-small" style="margin-bottom: 15px;">
+                            <span th:text="${banda.cantMiembros}" style="padding: 10px; border: 1px solid #ccc; display: block;"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <!-- Detenidos -->
+        <article id="detenidos" class="panel">
+            <header>
+                <h2>Información de Detenidos</h2>
+            </header>
+
+            <div style="background-color: #f9f9f9; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); margin-top: 20px;">
+                <!-- Lista de Detenidos -->
+                <div th:each="detenido : ${detenidos}" style="margin-bottom: 20px;">
+                    <div class="row">
+                        <div class="col-4 col-12-small" style="margin-bottom: 15px;">
+                            <span th:text="${detenido.codigo}" style="padding: 10px; border: 1px solid #ccc; display: block;"></span>
+                        </div>
+                        <div class="col-4 col-12-small" style="margin-bottom: 15px;">
+                            <span th:text="${detenido.nombre}" style="padding: 10px; border: 1px solid #ccc; display: block;"></span>
+                        </div>
+                        <div class="col-4 col-12-small" style="margin-bottom: 15px;">
+                            <span th:text="${detenido.banda != null ? detenido.banda.numeroDeBanda : 'No pertenece a ninguna banda'}" style="padding: 10px; border: 1px solid #ccc; display: block;"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+
+        <!-- Footer -->
+    <div id="footer">
+        <ul class="copyright">
+            <li>&copy; UTN-INSPT.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+        </ul>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/js/browser.min.js"></script>
+<script src="assets/js/breakpoints.min.js"></script>
+<script src="assets/js/util.js"></script>
+<script src="assets/js/main.js"></script>
+
+</body>
+</html>

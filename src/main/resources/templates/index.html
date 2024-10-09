@@ -1,0 +1,64 @@
+<!DOCTYPE HTML>
+<!--
+  Astral by HTML5 UP
+  html5up.net | @ajlkn
+  Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Ministerio de Seguridad INSPT</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="assets/css/main.css" />
+    <noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+</head>
+<body class="is-preload">
+
+<!-- Wrapper-->
+<div id="wrapper">
+
+    <!-- Main -->
+    <div id="main">
+        <!-- Personal -->
+        <article id="login" class="panel">
+            <header>
+                <h1 style="text-align: center;">INGRESO MINISTERIO</h1>
+                <p style="color: red;" th:text="${error}" />
+            </header>
+            <div>
+                <form th:action="@{/login}" method="post" >
+                    <div class="row">
+                        <div class="col-6 col-12-medium">
+                            <input type="text" name="codigo" placeholder="Código" required />
+                        </div>
+                        <div class="col-6 col-12-medium">
+                            <input type="password" name="password" placeholder="Password" required />
+                        </div>
+                        <div class="col-12-medium">
+                            <input type="submit" value="Entrar" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </article>
+    </div>
+
+    <!-- Footer -->
+    <div id="footer">
+        <ul class="copyright">
+            <li>&copy; UTN-INSPT.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+        </ul>
+    </div>
+
+</div>
+
+<!-- Scripts -->
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/js/browser.min.js"></script>
+<script src="assets/js/breakpoints.min.js"></script>
+<script src="assets/js/util.js"></script>
+<script src="assets/js/main.js"></script>
+
+</body>
+</html>
